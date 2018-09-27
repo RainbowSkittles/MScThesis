@@ -1,1 +1,265 @@
-\chapter{Intergal On the Simplex}
+\chapter{Integrals On the Simplex}\label{sec:Chapter3}
+
+In this chapter, novel integral forms of the normalizing constant for 3 types of networks are presented: single-server networks (section \ref{sec:single_server_simplex_integral}), single-server networks with delay(section \ref{sec:inf_server_simplex_integral}), and multi-server networks (section \ref{sec: multi_server_simplex_integral}), with the main results being presented in equations (\ref{eq:start_simplex_single_server}), (\ref{eq:start_simplex_inf_server}), and (\ref{eq:multi_server_NC}), respectively. These take the form of integrals of functions over the \(K\)-dimensional unit simplex (denoted by \(\Delta_K\) or \(\mathbb{S}^K\)), for a network with \(K\) nodes/queues.
+\\\\
+These integral forms of the normalizing constant \(\mathbf{G}_{\boldsymbol{\theta}}(\mathbf{N})\) forms the basis of this project's approach, and will be used and referenced extensively throughout this report.
+\\\\
+The original proofs of the single-server and single and infinite (delay) server networks were given in \cite{Casale2017AcceleratingMethods}. Here, an alternative proof is presented, which uses the Dirichlet Integral identity over the simplex in equation (\ref{eq:dirichlet_simplex_integral}). 
+
+\section{Preliminaries}
+
+The purpose of this section is to summarize several important identities that are required to derive the simplex integral form of the normalizing constant.
+\\\\
+The multinomial theorem states that, for any set of real numbers \((x_1, x_2 ... x_k)\), and nonnegative integer \(V\):
+\begin{equation}\label{eq:mt}
+    \bigg( \sum_{k=1}^K x_k \bigg)^V = V! \sum_{\substack{\mathbf{v} \geq 0, \\ \sum_k^K v_k = V}}\prod_{k=1}^K \frac{x_k^{v_k}}{v_k!}
+\end{equation}
+
+\begin{theorem} \label{theorem:multinomial_2}
+The multinomial theorem implies the following. For any set of real numbers \((a_1, a_2 ... a_k)\), and nonnegative integer \(N\)
+    \begin{equation} \label{eq:multinomial_2}
+        a_1^{N_1} a_2^{N_2} ... a_R^{N_R} = \frac{1}{N!} \frac{\partial^{N_1}....\partial^{N_R}}{\partial t_1^{N_1}....\partial t_R^{N_R}}\bigg( \sum_{i=1}^R a_i t_i \bigg)^N
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    Taking the term on the right hand side of (\ref{eq:multinomial_2}), using (\ref{eq:mt}), we can write:
+    \begin{equation}\label{eq:differentiation_filter}
+        \frac{1}{N!} \frac{\partial^{N_1}....\partial^{N_R}}{\partial t_1^{N_1}....\partial t_R^{N_R}}\bigg( \sum_{i=1}^R a_i t_i \bigg)^N = \frac{1}{N!} \frac{\partial^{N_1}....\partial^{N_R}}{\partial t_1^{N_1}....\partial t_R^{N_R}} \bigg( N! \sum_{\substack{\mathbf{n} \geq 0, \\ \sum_i^R n_r = N}}\prod_{i
+        =1}^R \frac{(a_i t_i)^{n_i}}{n_i!} \bigg)
+    \end{equation}
+    And the fact that 
+    \begin{equation*}
+        \frac{\partial^{N_i}}{\partial t_i ^{N_i}} \prod_{i=1}^R t^{n_i} = 
+        \begin{cases}
+             \prod_i^R N_i! & \text{if } n_i = N_i, \forall i=1...R \\
+            0 & \text{otherwise}
+        \end{cases}
+    \end{equation*}
+    
+    We recover the left hand side of (\ref{eq:multinomial_2}).
+    
+\end{proof}
+
+Another important result is the identity of the definite integral over the simplex \(\Delta_K\):
+\begin{equation} \label{eq:dirichlet_simplex_integral}
+    \int_{\Delta_K} \prod_{k=1}^K u_k^{n_k} d\mathbf{u} = \frac{\prod_{k=1}^K n_k!}{\big( \sum_{k=1}^K n_k +K -1 \big)!}
+\end{equation}
+ The \(K\)-dimensional unit simplex is defined as a set of \(K\)-dimensional points \(\mathbf{u}\) in the positive quadrant, such that all such points have sum of their components equal to 1:
+ \begin{equation*}
+    \Delta_K = \bigg  \{ \mathbf{u} : \forall u_i > 0, \sum_{i=1}^K u_i = 1 \bigg \}
+\end{equation*}
+\subsection{Finite Differences}
+
+Another important concept required for the derivation of results in section \ref{sec: multi_server_simplex_integral} is that of finite differences. It may be seen as the discrete analog of continuous derivatives in calculus. 
+
+\begin{definition}
+    For a discrete function \(f_k\), defined at discrete points \(k \geq 1\) The \(n\)-th forward difference of a function is given by the recurrence relation:
+    \[\Delta_k^n = \Delta_k^{n-1} f_{k+1} - \Delta_k^{n-1} f_{k}\]
+    Where the first-order difference is given:
+    \[\Delta_k f_k = f_{k+1} - f_k\]
+\end{definition}
+
+An alternative formulation of the forward difference is that of the alternating sum:
+\begin{equation}
+    \Delta_k^n f_k = \sum_{k=0}^n (-1)^{n-k} \begin{pmatrix} n \\ k\end{pmatrix} f_k
+\end{equation}
+
+A result of Euler's formula for \(n\)-th differences of powers is given in \cite{Gould1978EulersPowers} for the case where \(f_k\) is a polynomial of the form \(k^m\):
+\begin{equation}\label{eq:euler_power_diffrences}
+    \Delta_k^n k^m = \sum_{k=0}^n (-1)^{n-k} \begin{pmatrix} n \\ k\end{pmatrix} k^m = 
+    \begin{cases}
+    0 & \text{if } m < n \\
+    n! & \text{if } m=n
+    \end{cases}
+\end{equation}
+
+To generalize to multivariate polynomials \(p(\mathbf{k})\), where \(\mathbf{k} = (k_1, ... k_m)\), we introduce the notation for the composition of \(m\) forward differences:
+\begin{equation}
+    \Delta_\mathbf{k}^\mathbf{n} p(\mathbf{k}) = \Delta_{k_m}^{n_m} \Delta_{k_{m-1}}^{n_{m-1}} ... \Delta_{k_1}^{n_1} p(\mathbf{k})
+\end{equation}
+
+The repeated application of Euler's formula (\ref{eq:euler_power_diffrences}) on each \(\Delta^n_k\) operator leads to the following proposition from \cite{Casale2018ExplicitRepresentations}:
+\begin{theorem} \label{theorem:multivar_euler_power_differnces}
+    Let \(p(\mathbf{k})\) be a polynomial of degree \(n = n_1 + ... + n_m\) in the discrete variable \(\mathbf{k} = (k_1, ... k_m)\). If we denote the coefficient of the monomial \(k_1^{n_1}k_2^{n_2}...k_M^{n_m}\) as \(a_0\) , then
+    \begin{equation}
+        \Delta_\mathbf{k}^\mathbf{n} p(\mathbf{k}) = \sum_{\mathbf{0 \geq k \neq n}} (-1)^{n-k} \prod_{i=1}^m \begin{pmatrix} n_i \\ k_i \end{pmatrix} p(\mathbf{k}) = a_0 \prod_{i=1}^m n_i!
+    \end{equation}
+\end{theorem}
+
+A formal, inductive prove on the above theorem is given in \cite{Casale2018ExplicitRepresentations}. A consequence of the above theorem is that for set of \(m\) arbitrary coefficients \(\mathbf{u} = (u_1, ... , u_m)\):
+\begin{equation}\label{eq:power_differences_multinomial}
+    \frac{1}{n!} \Delta_{\mathbf{k}}^{\mathbf{n}} \bigg( \sum_{i=1}^m k_i u_i\bigg)^n =
+    \frac{1}{n!} \Delta_{\mathbf{k}}^{\mathbf{n}} \sum_{\substack{\mathbf{v \leq 0} \\ v=n}} \frac{n!}{\prod_{j=1}^m v_j!} \prod_{i=1}^m k_i^{v_i} u_i^{v_i} = \prod_{i=1}^m u_i^{n_i}
+\end{equation}
+
+\section{Integral form for Single Server Node Networks} \label{sec:single_server_simplex_integral}
+
+The integral form for single-server node networks over the \(K\)-dimensional unit simplex \(\Delta_K\) is given in the theorem below, and a proof is presented:
+
+\begin{theorem} \label{theorem:simplex_single_server}
+In a multiclass closed queueing network with K single-server nodes
+    \begin{empheq}[box=\mymath]{equation}\label{eq:start_simplex_single_server}
+        G_{\boldsymbol{\theta}}(\mathbf{N}) =  \frac{(N+K-1)!}{N_1! ... N_R!} \int_{\Delta_K}\prod_{r=1}^R \bigg( \sum_{k=1}^K \theta_{kr} u_k \bigg)^{N_r} d\mathbf{u}
+    \end{empheq}
+Where \(\Delta_K = \{ \mathbf{u} \in \mathbb{R}^K | u_i \geq 0, \sum_{i=1}^K u_i = 1\}\) is the unit simplex.
+\end{theorem}
+
+\begin{proof}
+    We prove that (\ref{eq:start_simplex_single_server}) is equivalent to the original form of the normalizing constant:
+    \begin{equation}\label{eq:end_proof}
+    G_{\boldsymbol{\theta}}(\mathbf{N}) =  \sum_{\substack{n_{kr} \geq 0 \\ \sum_k n_{kr} = N_r \\ \forall r= 1...R}} \prod_{i=1}^{K} n_i! \prod_{k=1}^{M} \prod_{r=1}^{R} \frac{\theta_{kr}^{n_{kr}}}{n_{kr}!}
+    \end{equation}
+    
+    Where \(\mathbf{N} = (N_1, N_2 \dot ,N_R)\). And \(N = \sum_r^R N_r\). 
+    \\\\
+    Starting from (\ref{eq:start_simplex_single_server}), we first write the integral on the right hand side as:
+    \begin{equation*}
+        I_{\boldsymbol{\theta}}(\mathbf{N}) =  \int_{\Delta_K}\prod_{r=1}^R \bigg( \sum_{k=1}^K \theta_{kr} u_k \bigg)^{N_r} d\mathbf{u}
+    \end{equation*}
+    
+    Using the multinomial theorem of the form (\ref{eq:multinomial_2}), this can be written (after exchanging the order of integration and differentiation)
+    \begin{equation}
+        I_{\boldsymbol{\theta}}(\mathbf{N}) =  \frac{1}{N!} \frac{\partial^{N_1}....\partial^{N_R}}{\partial t_1^{N_1}....\partial t_R^{N_R}} \int_{\Delta_K}  \bigg( \sum_{r=1}^R \sum_{k=1}^K \theta_{kr} u_k t_r \bigg)^{N} d\mathbf{u}
+    \end{equation}
+
+    Applying the multinomial theorem (\ref{eq:mt}) on the sum in the brackets, we get:
+    \begin{equation}
+        I_{\boldsymbol{\theta}}(\mathbf{N}) =  \frac{1}{N!} \frac{\partial^{N_1}....\partial^{N_R}}{\partial t_1^{N_1}....\partial t_R^{N_R}} \int_{\Delta_K} N! \sum_{n_{kr} \geq 0 \\ \sum n_{kr} = N} \prod_{r=1}^R \prod_{k=1}^K \frac{\big(  \theta_{kr} u_k t_r \big)^{n_{kr}}}{n_{kr}!} d\mathbf{u}
+    \end{equation}
+    
+    The integrand then becomes (after switching integration and summation, and factorising out \(u_k\)):
+    \begin{equation}
+        I_{\boldsymbol{\theta}}(\mathbf{N}) = \frac{\partial^{N_1}....\partial^{N_R}}{\partial t_1^{N_1}....\partial t_R^{N_R}}  \sum_{n_{kr} \geq 0 \\ \sum n_{kr} = N} \int_{\Delta_K} \prod_{k=1}^K u_k^{n_k} d\mathbf{u} \prod_{r=1}^R \prod_{k=1}^K \frac{\big(  \theta_{kr} t_r \big)^{n_{kr}}}{n_{kr}!} 
+    \end{equation}
+    
+    Using (\ref{eq:dirichlet_simplex_integral}) this becomes:
+    \begin{align}
+        %%%%%%
+        I_{\boldsymbol{\theta}}(\mathbf{N}) 
+        & = \frac{\partial^{N_1}....\partial^{N_R}}{\partial t_1^{N_1}....\partial t_R^{N_R}}  \frac{1}{(N+K-1)!}  \sum_{\substack{n_{kr} \geq 0 \\ \sum n_{kr} = N}} \prod_{k=1}^K n_k! \prod_{r=1}^R \prod_{k=1}^K \frac{\big(  \theta_{kr} t_r \big)^{n_{kr}}}{n_{kr}!} \\
+        %%%%%%
+        & = \frac{\partial^{N_1}....\partial^{N_R}}{\partial t_1^{N_1}....\partial t_R^{N_R}}  \frac{1}{(N+K-1)!}  \sum_{\substack{n_{kr} \geq 0 \\ \sum n_{kr} = N}} \prod_{r=1}^R t_r^{n_r} \prod_{k=1}^K n_k! \prod_{r=1}^R \prod_{k=1}^K \frac{ \theta_{kr}^{n_{kr}}}{n_{kr}!} 
+    \end{align}
+    
+    Using \ref{eq:differentiation_filter}, the terms in the summation where \(n_r \neq N_r, \forall r=1...R\) goes to zero, and we are left with
+    \begin{equation}
+        I_{\boldsymbol{\theta}}(\mathbf{N}) 
+        = \frac{N_1!N_2!...N_R!}{(N+K-1)!}  \sum_{\substack{n_{kr} \geq 0 \\ \sum_k n_{kr} = N_r \\ \forall r= 1...R}} \prod_{k=1}^K n_k! \prod_{r=1}^R \prod_{k=1}^K \frac{ \theta_{kr}^{n_{kr}}}{n_{kr}!} 
+    \end{equation}
+    
+    Combining this back with :
+    \begin{equation}
+        G_{\boldsymbol{\theta}}(\mathbf{N}) =  \frac{(N+K-1)!}{N_1! ... N_R!} I_{\boldsymbol{\theta}}(\mathbf{N}) 
+    \end{equation}
+
+    Gives us the original form of the normalizing constant (\ref{eq:end_proof}). 
+\end{proof}
+
+\section{Integral form for Networks with Infinite Server Nodes} \label{sec:inf_server_simplex_integral}
+
+In this section, we prove the integral form for single-server node networks with infinite (delay) server present.
+
+\begin{theorem}
+In a multiclass closed queueing network with M nodes in total : K single-server nodes, and \(M-K\) infinte server nodes. The normalizing constant can be expressed by the integral:
+    \begin{empheq}[box=\mymath]{equation}\label{eq:start_simplex_inf_server}
+        G_{\boldsymbol{\theta}}(\mathbf{N}) =  \int_{\Delta_K} \int_{v=0}^{\infty} \frac{e^{-v} v^{K-1}}{N_1! ... N_R!} \prod_{r=1}^R \bigg( \sigma_r + v \sum_{k=1}^K \theta_{kr} u_k \bigg)^{N_r} dv d\mathbf{u} 
+    \end{empheq}
+    Where \(\sigma_r = \sum_{k=K+1}^M \theta_{kr}\), the sum of the infinite server node demands per class.
+\end{theorem}
+
+\begin{proof}
+    We can write (\ref{eq:start_simplex_inf_server}) as:
+    \begin{equation}
+        G_{\boldsymbol{\theta}}(\mathbf{N}) = \frac{1}{N_1! ... N_R!} \mathbf{I(N)}
+    \end{equation}
+    Where:
+    \begin{equation}
+        \mathbf{I(N)} = \int_{\Delta_K} \int_{v=0}^{\infty} e^{-v} v^{K-1} \prod_{r=1}^R \bigg( \sum_{k=1}^M \theta_{kr} q_k \bigg)^{N_r} dv d\mathbf{u} 
+    \end{equation}
+    \[q_k = 
+    \begin{cases}
+        u_k v & k \leq K\\
+        1 & k > K\\
+    \end{cases}\]
+    
+    Using the multinomial theorem (\ref{eq:mt}) and (\ref{eq:multinomial_2}) in the same way as it was used in section \ref{sec:single_server_simplex_integral}, we can write:
+    \begin{equation}
+        \mathbf{I(N)} = \frac{\partial^{N_1}....\partial^{N_R}}{\partial t_1^{N_1}....\partial t_R^{N_R}} \sum_{\substack{n_{kr} \geq 0 \\ \sum n_{kr} = N}} \int_{\Delta_K} \int_{v=0}^{\infty} e^{-v} v^{K-1} \prod_{r=1}^R \prod_{k=1}^M \frac{(\theta_{kr} t_r q_k)^{n_{kr}}}{n_{kr}!}  dv d\mathbf{u} 
+    \end{equation}
+    
+    Factorizing out \(v\) and \(u_k\) from \(q_k\):
+    \begin{equation}
+        \mathbf{I(N)} = \frac{\partial^{N_1}....\partial^{N_R}}{\partial t_1^{N_1}....\partial t_R^{N_R}} \sum_{\substack{n_{kr} \geq 0 \\ \sum n_{kr} = N}}  \int_{\Delta_K} \bigg( \prod_{i=1}^K u_i^{n_i} \bigg) d\mathbf{u} \int_{v=0}^{\infty} e^{-v} v^{n +K-1} dv \prod_{r=1}^R \prod_{k=1}^M \frac{(\theta_{kr} t_r)^{n_{kr}}}{n_{kr}!}  
+    \end{equation}
+    
+    Here \(n = \sum_{i=1}^K n_i\). Using the identity of the integral over the simplex (\ref{eq:dirichlet_simplex_integral}), as well as the fact that \(\int_{v=0}^{\infty} e^{-v} v^{n +K-1} dv = (n+K-1)!\):
+    \begin{equation}
+        \mathbf{I(N)} = \frac{\partial^{N_1}....\partial^{N_R}}{\partial t_1^{N_1}....\partial t_R^{N_R}} \sum_{\substack{n_{kr} \geq 0 \\ \sum n_{kr} = N}}  \prod_{i=1}^K n_i!  \prod_{r=1}^R \prod_{k=1}^M \frac{(\theta_{kr} t_r)^{n_{kr}}}{n_{kr}!}  
+    \end{equation}
+    
+    After applying the derivatives, by (\ref{eq:differentiation_filter}), the terms in the summation go to zero except for the terms where \(n_r=N_r, \forall r=1...R\). This gives us (\ref{eq:end_proof}), which is the original form of the normalizing constant.
+\end{proof}
+
+\section{Generalization to Multi-Server Nodes}\label{sec: multi_server_simplex_integral}
+The results of section \ref{sec:single_server_simplex_integral} can be generalized to the multi-server case. If we let \(\mathbf{s}=(s_1,...s_K)\) specify the number of servers at each node,the following result was shown to be true in \cite{Casale2018ExplicitRepresentations}:
+
+\begin{theorem}
+    In a network with multiclass, multi-server queues, the normalizing constant can be given by the following:
+    \begin{empheq}[box=\mymath]{equation} \label{eq:multi_server_NC}
+        G_{\boldsymbol{\theta}}(\mathbf{N}) = \frac{1}{\prod_{r=1}^R N_r!} \int_{\Delta_K} \sum_{\mathbf{0 \leq v <s}} \mathbf{\alpha_v} \boldsymbol{\Delta}_{t_0}^{N-v} \boldsymbol{\Delta}_{\mathbf{t}}^{\mathbf{v}} \prod_{r=1}^R \bigg( \sum_{k=1}^K \sigma_{k,r}(t_k + t_0 u_k) \bigg)^{N_r} d\mathbf{u}
+    \end{empheq}
+    
+    Where \(\sigma_{kr}=\theta_{kr}/s_k\), \(\mathbf{v}=(v_1,...,v_K)\), \(v=\sum_{i=1}^K v_i\), \(\mathbf{t}=(t_1,...t_K)\), and
+    
+    \begin{equation}
+        \alpha_\mathbf{v} = \frac{(N+K-1-v)!}{(N-v)!} \prod_{i=1}^K \frac{s_i^{v_i}}{v_i!} \bigg(1-\frac{v_i}{s_i} \bigg)
+    \end{equation}
+\end{theorem}
+
+A sketch of the proof will be presented here, following \cite{Casale2018ExplicitRepresentations}:
+\begin{proof}
+    
+    Casale \cite{Casale2018ExplicitRepresentations} showed that for the normalizing constant of a multiserver model \(G(\mathbf{N})\), the following holds:
+    \begin{equation} \label{eq:multiserver_1}
+        G(\mathbf{N}) = \frac{\Delta_{\mathbf{n}}^{\mathbf{N}} G_{\mathbf{n}}^{ld}(N)}{\prod_{r=1}^R N_r}
+    \end{equation}
+    
+    Where 
+    \begin{equation}
+        G^{ld}_{\mathbf{n}}(N) = \sum_{\substack{\mathbf{k} \geq \mathbf{0}: \\ \sum_{i=1}^Mk_i = N} } \prod_{i=1}^M \bigg( \frac{\theta_i(\mathbf{n})}{\alpha_i(k_i)} \bigg)^{k_i}    
+    \end{equation}
+    
+    Here \(\theta(\mathbf{n}) = \sum_r^R n_r \theta_{kr}\), and \(\alpha_i(k_i)\) are arbitrary load-dependent scaling factors. Furthermore, \cite{Gordon1990TheNetworks} shows that the following form for multiserver models holds:
+    \begin{equation}
+        G^{ld}_{\mathbf{n}}(N) = \sum_{\mathbf{0 \leq v \leq s-1}} \Tilde{G}_{\mathbf{n}}(N-v) \bigg( \prod_{i=1}^K \frac{(\sigma_i(\mathbf{n}) s_i))^{v_i}}{v_i!} \bigg( 1 - \frac{v_i}{s_i} \bigg) \bigg)
+    \end{equation}
+    
+    Where \(\Tilde{G}_{\mathbf{n}}(N-v)\) is the single-class normalizing constant of a load-independent model with demands \(\sigma_i(\mathbf{n}) = \theta_i(\mathbf{n})/s_i\).
+    \\\\
+    This readily gives us the form of the normalizing constant:
+    \begin{equation}
+        G^{ld}_{\mathbf{n}}(N) = \sum_{\substack{\mathbf{v \leq 0:} \\ v_i \leq s_i-1 }} \alpha_\mathbf{v} \int_{\Delta_K} \bigg( \sum_{k=1}^K \sigma_k(\mathbf{n})u_k \bigg)^{N-v} d\mathbf{u} \prod_{i=1}^K \sigma_i(\mathbf{n})^{v_i}
+    \end{equation}
+    
+    Using identities theorem (\ref{theorem:multivar_euler_power_differnces}) and equation (\ref{eq:power_differences_multinomial}), we get:
+    \begin{equation}
+        G^{ld}_{\mathbf{n}}(N) = \sum_{\substack{\mathbf{v \leq 0:} \\ v_i \leq s_i-1 }} \alpha_\mathbf{v} \int_{\Delta_K} \frac{1}{N!} \boldsymbol{\Delta}_{t_0}^{N-v} \boldsymbol{\Delta}_{\mathbf{v}}^{\mathbf{t}} \bigg( t_0 \sum_{k=1}^K \sigma_k(\mathbf{n})u_k + \sum_{i=1}^K t_i \sigma_i(\mathbf{n})\bigg)^N d\mathbf{u}
+    \end{equation}
+    
+    Combining this with (\ref{eq:multiserver_1}), we get the following:
+    \begin{align}
+        G(\mathbf{N}) & = \frac{1}{\prod_{i=1}^R N_r!} \int_{\Delta_K} \sum_{\mathbf{0 \leq v < s}} \alpha_{\mathbf{v}} \boldsymbol{\Delta}_{t_0}^{N-v} \boldsymbol{\Delta}_{\mathbf{t}}^{\mathbf{v}} \boldsymbol{\Delta}_{\mathbf{n}}^{\mathbf{N}} \frac{1}{N!} \bigg( \sum_{k=1}^K \sum_{r=1}^R \sigma_{kr} n_r (t_0 u_k + t_k) \bigg)^N d\mathbf{u} \\
+        & = \frac{1}{\prod_{i=1}^R N_r!} \int_{\Delta_K} \sum_{\mathbf{0 \leq v < s}} \alpha_{\mathbf{v}} \boldsymbol{\Delta}_{t_0}^{N-v} \boldsymbol{\Delta}_{\mathbf{t}}^{\mathbf{v}} \prod_{r=1}^{R} \bigg( \sum_{k=1}^K \sigma_{kr} n_r (t_0 u_k + t_k) \bigg)^{N_r} d\mathbf{u}
+    \end{align}
+    
+    Where equation (\ref{eq:power_differences_multinomial}) is used to get rid of operator \(\Delta_{\mathbf{n}}^{\mathbf{N}}\).
+    
+\end{proof}
+
+It is also worth noting that the normalizing constant can be written in the following form:
+\begin{equation}\label{eq:msint2}
+    \frac{1}{\prod_{r=1}^R N_r!} \sum_{\mathbf{0 \leq v <s}} \mathbf{\alpha_v} \boldsymbol{\Delta}_{t_0}^{N-v} \boldsymbol{\Delta}_{\mathbf{t}}^{\mathbf{v}} \int_{\Delta_K}  \prod_{r=1}^R \bigg( \sum_{k=1}^K \sigma_{k,r}(t_k + t_0 u_k) \bigg)^{N_r} d\mathbf{u}
+\end{equation}
+
+Which will be used in the discussions later, when considering ways to use randomized sampling methods to calculate this quantity.

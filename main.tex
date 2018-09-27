@@ -1,4 +1,4 @@
-\documentclass[12pt,twoside]{report}
+\documentclass[11pt,twoside]{report}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -9,7 +9,8 @@
 \newcommand{\reporttitle}{Java Algorithms for Computer Performance Analysis}
 \newcommand{\reportauthor}{Ong Wai Hong}
 \newcommand{\supervisor}{Dr. Giuliano Casale}
-\newcommand{\degreetype}{Master of Research}
+\newcommand{\secondmarker}{Prof. Peter G. Harrison}
+\newcommand{\degreetype}{Computing Science}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -19,7 +20,7 @@
 % load some macros
 \input{notation}
 
-\date{August 2018}
+\date{September 2018}
 
 \begin{document}
 
@@ -51,7 +52,7 @@
 \clearpage{\pagestyle{empty}\cleardoublepage}
 \pagenumbering{arabic}
 \setcounter{page}{1}
-\fancyhead[LE,RO]{\slshape \rightmark}
+\fancyhead[LE,RO]{Sec. \thesection}
 \fancyhead[LO,RE]{\slshape \leftmark}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -66,15 +67,25 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Experimental Results}
+\input{Chap4_ComputationOfIntegral/ComputationOfIntegal}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Conclusion}
+\input{Chap5_DesignAndImplementation/DesignAndImplementation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{Chap6_EvaluationAndAnalysis/EvaluationAndAnalysis}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{Chap7_Conclusion/Conclusion}
 
 
 %% bibliography
-\bibliographystyle{apa}
+\bibliographystyle{abbrv}
+\bibliography{bibliography}
 
+\begin{appendices}
+    \input{Appendix.tex}
+\end{appendices}
 
 \end{document}

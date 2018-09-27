@@ -1,0 +1,42 @@
+\chapter{Conclusion}
+
+We conclude the report with this chapter. In this chapter, the main project outcomes are summarized. These will be considered in terms of theoretical achievements, implementation of the software tools, as well as accuracy and speed of the algorithm. Areas for further, and more immediate work are also identified. Possible extensions are suggested which could potentially improve the efficiency of the algorithm.
+
+\section{Summary of Project Outcomes}
+\subsection{Theory}
+\begin{itemize}[leftmargin=*]
+    \item This report consolidates the required theory which forms the basis of the Logistic Sampling algorithm. It suggests alternative proofs to results first derived in \cite{Casale2017AcceleratingMethods}, to give integrals of the form:
+    \[\int_{\Delta_K} f(\mathbf{u}) d \mathbf{u}\]
+    \item Monte Carlo integration theory was succesfully applied to the analysis and improvement of the existing Logistic Sampling algorithm. A better sampling distribution - the student-t was parametrized and applied to the algorithm.
+    \item Novel results for the logistic sampling algorithm utilizing the multiplicative logistic transform were derived, to give an alternative form of the logistic sampling algorithm in a different coordinate system. Theorems relating the logistic integrand function under the additive transform and multiplicative transforms were derived.
+    \item The multi-server extension to the integral form of the normalizing constant was analyzed, and approaches to compute the integral suggested. New mathematical results, including stationary point equations and closed-form stationary point hessian expressions were derived.
+    \item The variance cancellation phenomenon for the Logistic Sampling algorithm for multi-server networks was identified and proven to be true in numerical experiments.
+\end{itemize}
+
+\subsection{Software Implementation}
+\begin{itemize}[leftmargin=*]
+    \item Five versions of the Logistic Sampling Algorithm was implemented. Three logistic algorithms were implemented for the simplex integral form of the normalizing constant under the additive transform. This includes the single-server only case, single-server with delay, and multi-server networks. For functions under the multiplicative transform, only the first two were implemented and tested.
+    \item The implementation of these algorithms was interfaced with the JMT front-end, to extend the suite of tools offered by JMVA. These are now available as an alternative performance measure algorithm in JMT.
+    \item Modular and re-usable design of classes within the implementation makes it easy to improve upon, and extend the algorithm in software.
+    \item Thorough testing and verification of the classes used in the final algorithm was performed through the strategy of unit testing. This report also provides documentation for the implemented classes.
+\end{itemize}
+
+\subsection{Evaluation of Algorithm}
+\begin{itemize}[leftmargin=*]
+    \item Thorough numerical experimentation of the Logistic Sampling algorithm was carried out. The results are thoroughly documented.
+    \item A statistical framework and tools were established to analyze the distribution of errors of the Logistic Sampling algorithm. This included the use of t-distribution estimate of the true MAPE given an estimated value of the MAPE.
+    \item Trends in the results were explained by alluding to Monte Carlo integration theory. The validity of Monte Carlo integration theory gives a good prediction tool of potential errors of the results of the Logistic Sampling algorithm.
+    \item MAPE approximates were measured and tabulated to give users of the algorithm an expected accuracy of their results.
+    \item The hypothesis that one form of transform was better than the other (among the additive and multiplicative transforms) was disproved by examining MAPE confidence intervals.
+    \item The phenomenon of variance cancellation was established to be true through numerical experiments. The summations first method of the Logistic Sampling Algorithm was shown to be superior.
+\end{itemize}
+
+\section{Future Work}
+\begin{itemize}[leftmargin=*]
+    \item Immediate future work should focus on debugging and understanding the implementation of the multi-server algorithm. Numerical instability in the stationary point gradient descent is still preventing the algorithm from being able to accomodate larger models.
+    \item Another area of further work would be to find an iterative set of equations for the multi-server stationary points, and remove the need for gradient descent. This will involve the solution of an equation of the form :
+    \[-e^{k(\mathbf{x})} \sum_{\mathbf{0 \leq v <s}} \mathbf{\alpha_v} \boldsymbol{\Delta}_{t_0}^{N-v} \boldsymbol{\Delta}_{\mathbf{t}}^{\mathbf{v}} 
+    \bigg[ -\frac{\partial}{\partial \mathbf{x}} \bigg(h(\mathbf{x}, t_0, \mathbf{t}) \bigg) e^{-h(\mathbf{x}, t_0, \mathbf{t})} \bigg] = \mathbf{0}\]
+    \item The sampling efficiency could be improved by using higher order derivatives to parametrize an asymmetric sampling distribution that can achieve better variance reduction.
+    \item Alternative transforms from the simplex to the real domain could be investigated and perhaps implemented for the Logistic Sampling algorithm. This could include the isometric log-ratio transformation, and centred log-ratio transformation \cite{Egozcue2003IsometricAnalysis}.
+\end{itemize}

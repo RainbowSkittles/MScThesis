@@ -1,10 +1,47 @@
 \chapter{Introduction}
 
-\begin{figure}[tb]
-\centering
-\includegraphics[width = 0.4\hsize]{./figures/imperial}
-\caption{Imperial College Logo. It's nice blue, and the font is quite stylish. But you can choose a different one if you don't like it.}
-\label{fig:logo}
-\end{figure}
+The field of computer performance modelling involves estimating performance metrics of a computer system, and providing insight into performance optimizations. There are several ways to perform this task. \textit{Direct measurement} of performance indices can be carried out after a system has been built. While this method does achieve its purpose, it is unsuitable for tasks such as capacity planning which needs these metrics to be calculated before building the system. \textit{Simulations} of the specified system can be carried out in order to predict system performance, but these can be computationally expensive if accurate results are too be achieved \cite{BalsamoProductNetworks}. 
+\\\\
+Given certain assumptions about the system properties, it is possible to derive \textit{analytical models} of the system, which are very often far more cost effective than simulation methods. A widely used performance modelling technique is that of queueing network theory. Queueing theory models computer systems stochastically as networks of service centres. \textit{Jobs} or \textit{customers} in this network are serviced in these centres, and traverse the network between service centres.
+\\\\
+This project focuses on the small but important class of networks which satisfy the so-called product form assumptions \cite{Bolch2006QueueingApplications}. In particular, we focus on multiclass, closed networks with product form solution. Motivated by the problem of the inference of closed queueing network models \cite{Casale2017AcceleratingMethods}, we focus on algorithms that can compute the normalizing constant of state probabilties of the queueing network. This quantity is important as it appears in many areas of performance modelling. In this particular case, it is useful for computing likelihoods of system parameters given measured data.
+\\\\
+There are a number of established, exact algorithms for the computation of this normalizing constant, which we will abbreviate as \(G\). These include recursive algorithms such as the Convolution algorithm \cite{Buzen1973ComputationalServers} and RECAL \cite{Conway1986RECAL---aNetworks}, moment-based algorithms \cite{Casale2011ExactMoments} such as the MoM and CoMoM algorithms, and algorithms based on generating functions \cite{MultidimensionalJSTOR}. Furthermore, methods based on asymptotic expansions of analytic forms of the normalizing constant \cite{McKenna1984AsymptoticNetworks} and Monte Carlo methods \cite{Ross1994MonteNetworks} have been proposed as inexpensive approximations to the normalizing constant. However, maximum likelihood estimation problems still remain too expensive to solve or give inaccurate results due to poor approximations to the normalizing constant \cite{Casale2017AcceleratingMethods}.
+\\\\
+To that end, Casale \cite{Casale2017AcceleratingMethods} has proposed a novel integral form of the normalizing constant \(G\). The main result was to reformulate the normalizing constant in terms of an integral over the unit simplex. This form of the normalizing constant provides a very well-behaved and easily integrable function, under a suitable transform given in \cite{Aitchison1982TheData}. Novel expansions to this integral based on Laplace's method has led to \(O(1)\) time computation for \(G\). A novel Monte Carlo integration method, based on importance sampling was also succesfully applied to this integral form of the normalizing constant. 
 
-Figure~\ref{fig:logo} is an example of a figure. 
+\section{Project Overview}
+\subsection{Main objectives}
+The primary objective of this project is to provide an implementation of the Logistic Sampling Algorithm. This is the algorithm that is based on the Monte Carlo integration approach proposed in \cite{Casale2017AcceleratingMethods}, based on the simplex integral form of the normalizing constant \(G\). A Java implementation of this algorithm will be incorporated in the 'Java Modelling Tools' (JMT) \cite{JavaJMT} suite of computer performance anlysis applications. In particular, this project will incorporate the first randomized algorithm into JMVA, the analytical toolkit of JMT.
+
+The initial objectives of this project is as follows:
+\begin{itemize}
+    \item To provide a reliable and fast Java implementation of the Logistic Sampling Algorithm, to be integrated into the JMT software suite.
+    \item To thoroughly evaluate the accuracy and preformance of this algorithm, and characterize expected behaviour.
+    \item To improve upon the existing performance of the Logistic Sampling algorithm by gaining insight into Monte Carlo approximation theory.
+    \item As an extension, explore other integral forms of the normalizing constant, and attempt to formulate efficient algorithms to evaluate them.
+\end{itemize}
+
+\subsection{Summary of approach}
+This project will focus on randomized integration methods to computing integrals of the following form:
+\[\int_{\Delta_K} f(\mathbf{u}) d \mathbf{u}\]
+Where \(\Delta_K\) is the K-dimensional unit simplex, and \(\mathbf{u} \in \mathbb{R}^K\). The unit simplex is a subspace in the non-negative orthant of the K-dimensional real domain, in which all point within this space have elements sum to 1.
+\\\\
+This project saw the successful implementation of the Logistic sampling algorithm for computing the normalizing constant of the above form in the case of single-server only networks, as well as single-server with delay networks. An improvement over results achieved in \cite{Casale2017AcceleratingMethods} was also made possible by optimizing the Monte Carlo integration strategy of the Logistic Sampling.
+\\\\
+The major contribution of this project is two-fold. First is the exploration and derivation of theoretical results of alternative transform strategies of the simplex. This involves using the multiplicative transform (the original approach involves the use of the additive logistic transform) proposed in \cite{Aitchison1982TheData} to derive a new integral form of the normalizing constant. Various properties relating the multiplicative transform to the additive transform is derived.
+\\\\
+Second, the project explores an extension to the models considered, by considering the simplex integral form of \(G\) for multi-server networks. This project aims to develop and analyze similar, but novel algorithms to compute this integral form of \(G\) in the case of multi-server service station networks. 
+
+\subsection{Challenges}
+
+\section{Chapter Summary}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Chapter 2} introduces the basic theory of queueing networks, the product form solution, and existing algorithms to calculate performance indices as well as normalizing constants. These include the Convolution, RECAL, MVA algorithms. Approximate and randomized algorithms are also inrtoduced.
+    \item \textbf{Chapter 3} Covers the derivation of results obtained in \cite{Casale2017AcceleratingMethods}. An alternative proof to the results is given. Besides that it also covers the derivation of the multi-server normalizing constant \cite{Casale2018ExplicitRepresentations}.
+    \item \textbf{Chapter 4} The methods for the efficient computation of the integral form of the normalizing constant is covered. This includes the theory of logistic transformation, the application of Laplace's method for computing the integral, and Monte Carlo integration theory for the Logistic Sampling. Novel results for the multiplicative transform, and the multi-server extension of the normalizing constant integral are given in this chapter.
+    \item \textbf{Chapter 5} This chapter covers the software implementation of the Logistic Sampling algorithm in JMVA and JMT. Software engineering practices are discussed, and through documentation of the code is provided in this chapter.
+    \item \textbf{Chapter 6} The evaluation of the Logistic Sampling algorithm is described in this chapter. The distribution of errors of the Logistic Sampling Algorithm is inferred under different conditions. Certain properties of the algorithm are also experimentally inferred through thorough testing.
+    \item \textbf{Chapter 7} Gives concluding remarks on the outcomes of the project, and gives suggestions on areas for improvement, as well as opportunities for further research.
+\end{itemize}

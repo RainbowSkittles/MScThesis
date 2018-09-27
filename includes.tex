@@ -32,6 +32,7 @@
 \usepackage{backref} % needed for citations
 \usepackage{array}
 \usepackage{latexsym}
+\usepackage[toc,page]{appendix}
 \usepackage[pdftex,pagebackref,hypertexnames=false,colorlinks]{hyperref} % provide links in pdf
 
 \hypersetup{pdftitle={},
@@ -48,20 +49,27 @@
 
 \usepackage[all]{hypcap}
 
-
+\usepackage{amsthm}
 %\usepackage{color}
 %\usepackage[tight,ugly]{units}
 %\usepackage{float}
-%\usepackage{tcolorbox}
+\usepackage{empheq}
+\usepackage[most]{tcolorbox}
 %\usepackage[colorinlistoftodos]{todonotes}
-% \usepackage{ntheorem}
+%\usepackage{ntheorem}
 % \theoremstyle{break}
-% \newtheorem{lemma}{Lemma}
-% \newtheorem{theorem}{Theorem}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
 % \newtheorem{remark}{Remark}
-% \newtheorem{definition}{Definition}
-% \newtheorem{proof}{Proof}
-
+%\newtheorem{proof}{Proof}
+\newtheorem{definition}{Definition}[section]
+\usepackage{amssymb} % for special math symbols
+\usepackage{booktabs} % for special tables
+\usepackage{float} % for fixed tables/figures
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{color}
 
 %%% Default fonts
 \renewcommand*{\rmdefault}{bch}
@@ -82,7 +90,6 @@
 \renewcommand{\footrulewidth}{0.1pt}
 \captionsetup{margin=10pt,font=small,labelfont=bf}
 
-
 %--- chapter heading
 
 \def\@makechapterhead#1{%
@@ -102,5 +109,42 @@
     \Huge \bfseries  #1\par\nobreak
     \vskip 30\p@
   }}
+  
+% -- Java code listing
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+% --- pretty math box
+
+\newtcbox{\mymath}[1][]{%
+    nobeforeafter, math upper, tcbox raise base,
+    enhanced, colframe=gray,
+    colback=blue!60!green!10, boxrule=1pt,
+    #1}
+
+\newtcbox{\mymathtwo}[1][]{%
+    nobeforeafter, math upper, tcbox raise base,
+    enhanced, colframe=black,
+    colback=white, boxrule=.5pt,
+    #1}
 
 \allowdisplaybreaks
